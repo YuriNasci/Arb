@@ -1,0 +1,248 @@
+<html>
+<body>  
+  Odd 1: <input id = "odd1" type = "number" step = 0.01 min = 1 value = 2.00 onchange="setOdd1();"></input>
+  Odd 2: <input id = "odd2" type = "number" step = 0.01 min = 1 value = 2.00 onchange="setOdd2();"></input><br>
+  
+  Aposta 1: <input id = "aposta1" type = "number" step = 0.01 min = 0 value = 0.00 onchange="setAposta1();"></input>
+  Aposta 2: <input id = "aposta2" type = "number" step = 0.01 min = 0 value = 0.00 onchange="setAposta2();"></input><br>
+  
+  Percentual Comissão 1: <input id = "comissao1" type = "number" step = 0.01 min = 0 max = 100 value = 0.00 onchange="setComissao1();"></input>
+  Percentual Comissão 2: <input id = "comissao2" type = "number" step = 0.01 min = 0 max = 100 value = 0.00 onchange="setComissao2();"></input><br>
+  
+  Percentual Devolução 1: <input id = "percentual_devolucao1" type = "number" step = 0.01 min = 0  max = 100 value = 0.00 onchange="set_percentual_devolucao1();"></input>
+  Percentual Devolução 2: <input id = "percentual_devolucao2" type = "number" step = 0.01 min = 0 max = 100 value = 0.00 onchange="set_percentual_devolucao2();"></input><br>
+  
+  Valor de Lucro 1: <input id = "valor_lucro1" type = "number" value = 0.00 disabled></input>
+  Valor de Lucro 2: <input id = "valor_lucro2" type = "number" value = 0.00 disabled></input><br>
+  
+  Percentual de Lucro 1: <input id = "percentual_lucro1" type = "number" value = 0.00 disabled></input>
+  Percentual de Lucro 2: <input id = "percentual_lucro2" type = "number" value = 0.00 disabled></input><br>
+  
+  Stake: <input id = "stake" type = "number" step = 0.01 min = 0 value = 0.00 onchange="setStake();"></input>
+<script>
+  // Aposta perdida retorna a o valor
+  odd1 = odd2 = 2;
+  aposta1 = aposta2 = stake = stake_aux = percentual_comissao1 = percentual_comissao2 = valor_comissao1 = valor_comissao2 = 
+  percentual_devolucao1 = percentual_devolucao2 = 0;
+  
+  function setStake()  {
+    // rever isso...
+    stake = parseFloat(document.getElementById("stake").value);
+	if (!stake) stake = 0;
+	
+	aposta1 = stake / odd1;
+	aposta2 = stake / odd2;
+	
+	setValorComissao1();
+	setValorComissao2();
+	
+	aposta1 += valor_comissao1 / odd1;
+	aposta2 += valor_comissao2 / odd2;
+	
+	stake_aux = aposta1 + aposta2;
+	
+	setValorComissao1();
+	setValorComissao2();
+	
+	document.getElementById("stake").value = stake_aux.toFixed(2);
+	document.getElementById("aposta1").value = aposta1.toFixed(2);
+	document.getElementById("aposta2").value = aposta2.toFixed(2);
+	
+	setLucro();
+  }
+  
+  function setOdd()  {
+	aposta1 = stake / odd1;
+	aposta2 = stake / odd2;
+	
+	setValorComissao1();
+	setValorComissao2();
+	
+	aposta1 += valor_comissao1 / odd1;
+	aposta2 += valor_comissao2 / odd2;
+	
+	stake_aux = aposta1 + aposta2;
+	
+	setValorComissao1();
+	setValorComissao2();
+	
+	document.getElementById("stake").value = stake_aux.toFixed(2);
+	document.getElementById("aposta1").value = aposta1.toFixed(2);
+	document.getElementById("aposta2").value = aposta2.toFixed(2);
+	
+	setLucro();
+  }
+  
+  function setOdd1() {
+    odd1 = parseFloat(document.getElementById("odd1").value);
+	
+	if (!odd1) odd1 = 0;
+	
+	setOdd();
+  }
+  
+  function setOdd2()  {
+	odd2 = parseFloat(document.getElementById("odd2").value);
+	
+	if (!odd2) odd2 = 0;
+	
+	setOdd();
+  }
+  
+  function setAposta1()  {
+	aposta1 = parseFloat(document.getElementById("aposta1").value);
+	if (!aposta1) aposta1 = 0;
+	
+	document.getElementById("aposta1").value = aposta1.toFixed(2);
+	
+	stake = aposta1 * odd1;
+	aposta2 = stake / odd2;
+	
+	setValorComissao1();
+	setValorComissao2();
+	
+	aposta2 += valor_comissao2 / odd2;
+	aposta2 -= valor_comissao1 / odd2;
+	setValorComissao2();
+	
+	stake = stake_aux = aposta1 + aposta2;
+	
+	document.getElementById("stake").value = stake.toFixed(2);
+	document.getElementById("aposta2").value = aposta2.toFixed(2);
+
+	setLucro();
+  }
+  
+  function setAposta2()  {
+	aposta2 = parseFloat(document.getElementById("aposta2").value);
+	if (!aposta2) aposta2 = 0;
+	
+	document.getElementById("aposta2").value = aposta2.toFixed(2);
+	
+	stake = aposta2 * odd2;
+	aposta1 = stake / odd1;
+	
+	setValorComissao1();
+	setValorComissao2();
+	
+	aposta1 += valor_comissao1 / odd1;
+	aposta1 -= valor_comissao2 / odd1;
+	setValorComissao1();
+	
+	stake = stake_aux = aposta1 + aposta2;
+	
+	document.getElementById("stake").value = stake.toFixed(2);
+	document.getElementById("aposta1").value = aposta1.toFixed(2);
+  
+	setLucro();
+  }
+  
+  function setComissao1()  {
+	percentual_comissao1 = parseFloat(document.getElementById("comissao1").value);
+	
+	if (!percentual_comissao1) percentual_comissao1 = 0;
+	
+	if (valor_comissao1)  {
+	  	aposta1 = stake / odd1;
+		
+		aposta2 = stake / odd2;
+		setValorComissao2();
+		aposta2 += valor_comissao2 / odd2;
+		document.getElementById("aposta2").value = aposta2.toFixed(2);
+	}
+	
+	setValorComissao1();
+	
+	aposta1 += valor_comissao1 / odd1;
+	
+	setValorComissao1();
+	
+	stake_aux = aposta1 + aposta2;
+	
+	document.getElementById("aposta1").value = aposta1.toFixed(2);
+	document.getElementById("stake").value = stake_aux.toFixed(2);
+	setLucro();
+  }
+  
+  function setValorComissao1()  {
+	lucro = aposta1 * odd1 - aposta1;
+	valor_comissao1 = lucro * percentual_comissao1 / 100;
+  }
+  
+  function setComissao2()  {
+	percentual_comissao2 = parseFloat(document.getElementById("comissao2").value);
+	
+	if (!percentual_comissao2) percentual_comissao2 = 0;
+	
+	if (valor_comissao2)  {
+	  	aposta2 = stake / odd1;
+		
+		aposta1 = stake / odd1;
+		setValorComissao1();
+		aposta1 += valor_comissao1 / odd1;
+		document.getElementById("aposta1").value = aposta1.toFixed(2);
+	}
+	
+	setValorComissao2();
+	
+	aposta2 += valor_comissao2 / odd2;
+	
+	setValorComissao2();
+	
+	stake_aux = aposta1 + aposta2;
+	
+	document.getElementById("stake").value = stake_aux.toFixed(2);
+	document.getElementById("aposta2").value = aposta2.toFixed(2);
+	
+	setLucro();
+  }
+  
+  function setValorComissao2()  {
+	lucro = aposta2 * odd2 - aposta2;
+	valor_comissao2 = lucro * percentual_comissao2 / 100;
+  }
+  
+  function setLucro()  {
+	valor_lucro1 = aposta1 * odd1 - stake_aux - valor_comissao1 + aposta2 * percentual_devolucao2 / 100;
+	document.getElementById("valor_lucro1").value = valor_lucro1.toFixed(2);
+	
+	valor_lucro2 =  aposta2 * odd2 - stake_aux - valor_comissao2 + aposta1 * percentual_devolucao1 / 100;
+	document.getElementById("valor_lucro2").value = valor_lucro2.toFixed(2);
+	
+	percentual_lucro1 = valor_lucro1 / stake_aux * 100;
+	percentual_lucro1 = percentual_lucro1.toFixed(2);
+	document.getElementById("percentual_lucro1").value = percentual_lucro1;
+	
+	percentual_lucro2 = valor_lucro2 / stake_aux * 100;
+	percentual_lucro2 = percentual_lucro2.toFixed(2);
+	document.getElementById("percentual_lucro2").value = percentual_lucro2;
+  }
+  
+  function set_percentual_devolucao1()  {
+    percentual_devolucao1 = parseFloat(document.getElementById("percentual_devolucao1").value);
+	
+	aposta2 =  stake / odd2 - (aposta1 * percentual_devolucao1 / 100) / odd2;
+	setValorComissao2();
+	aposta2 += valor_comissao2 / odd2;
+	
+	stake = stake_aux = aposta1 + aposta2;
+	document.getElementById("stake").value = stake.toFixed(2);
+	document.getElementById("aposta2").value = aposta2.toFixed(2);
+	setLucro();
+  }
+  
+  function set_percentual_devolucao2()  {
+    percentual_devolucao2 = parseFloat(document.getElementById("percentual_devolucao2").value);
+	
+	aposta1 =  stake / odd1 - (aposta2 * percentual_devolucao2 / 100) / odd1;
+	setValorComissao1();
+	aposta1 += valor_comissao1 / odd1;
+	
+	stake = stake_aux = aposta1 + aposta2;
+	document.getElementById("stake").value = stake.toFixed(2);
+	document.getElementById("aposta1").value = aposta1.toFixed(2);
+	setLucro();
+  }
+</script>
+</body>
+</html>
